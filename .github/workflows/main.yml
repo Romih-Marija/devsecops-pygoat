@@ -3,8 +3,8 @@ name: CI
 on: [push]
 
 jobs:
-  sast_scan:
-    name: Run Bandit Scan
+  sast_scan_Bandit:
+    name: SAST - Bandit Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,15 @@ jobs:
         run: pip install bandit
 
       - name: Run Bandit Scan
-        run: bandit -r .
+        run: bandit -ll -ii -r . -f json -o bandit-report.json
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: bandit-findings
+          path: bandit-report.json
+          
   image_scan:
    name: Build Image and Run Image Scan
    runs-on: ubuntu-latest
