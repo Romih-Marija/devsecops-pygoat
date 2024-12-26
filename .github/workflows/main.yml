@@ -73,7 +73,11 @@ jobs:
         run: |
           docker build -f Dockerfile -t pygoat-app:latest .
           docker run -d -p 8080:8080 pygoat-app:latest
-          sleep 30
+          until curl -s http://localhost:8080; do
+            echo "Waiting for app to start..."
+            sleep 5
+          done
+          echo "App is up and running!"
 
       - name: Run ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
