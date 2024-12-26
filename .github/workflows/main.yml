@@ -78,9 +78,5 @@ jobs:
           target: 'http://localhost:8080' # Zamenjajte s ciljnim URL-jem, če ni lokalni
           rules-file: '.zap/rules.json'   # Opcijsko: dodajte pravila za izključitev
 
-      - name: Upload ZAP Findings
-        uses: actions/upload-artifact@v3
-        with:
-          name: zap-findings
-          path: *.html  # Privzeto ZAP generira HTML poročilo
+
 
