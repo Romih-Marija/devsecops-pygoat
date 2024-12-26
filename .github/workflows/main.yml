@@ -58,8 +58,15 @@ jobs:
      with:
        name: docker-scout-findings
        path: scout-report.sarif
- 
   zap_scan:
+    runs-on: ubuntu-latest
+    name: Scan the webapplication 
+      steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.12.0
+        with:
+          target: 'https://www.zaproxy.org/'
+  zap_scan2:
     runs-on: ubuntu-latest
     needs: security
     name: Run DAST scan on the web application
