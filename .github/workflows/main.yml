@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Source Code
         uses: actions/checkout@v2
 
       - name: Set up Python
@@ -30,11 +30,11 @@ jobs:
           path: bandit-report.json
           
   image_scan:
-   name: Build Image and Run Image Scan
+   name: Docker Image Security Scan
    runs-on: ubuntu-latest
 
    steps:
-   - name: Checkout code
+   - name: Checkout Source Code
      uses: actions/checkout@v2
 
    - name: Set up Docker
@@ -58,6 +58,29 @@ jobs:
      with:
        name: docker-scout-findings
        path: scout-report.sarif
+
+ dast_scan:
+    name: DAST - OWASP ZAP Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Start Application
+        run: |
+          docker run -d -p 8080:8080 myapp:latest
+        env:
+          APP_ENV: test
+
+      - name: Run OWASP ZAP Scan
+        uses: zapbot/zap-action@v0.3.1
+        with:
+          cmd: zap-baseline.py -t http://localhost:8080 -r zap-report.html
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: zap-scan-report
+          path: zap-report.html
 
 
 
