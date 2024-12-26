@@ -59,36 +59,36 @@ jobs:
        name: docker-scout-findings
        path: scout-report.sarif
 
- dast_scan:
-    name: DAST - OWASP ZAP Scan
-    runs-on: ubuntu-latest
+   dast_scan:
+      name: DAST - OWASP ZAP Scan
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout Source Code
+          uses: actions/checkout@v2
 
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v2
-
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3.8.0
+        - name: Set up Docker
+          uses: docker/setup-buildx-action@v3.8.0
      
-      - name: Build Docker Image
-        run: docker build -f Dockerfile -t myapp:latest .
-      - name: Start Application
-        run: |
-          docker run -d -p 8080:8080 myapp:latest
-        env:
-          APP_ENV: test
+        - name: Build Docker Image
+          run: docker build -f Dockerfile -t myapp:latest .
+        - name: Start Application
+          run: |
+            docker run -d -p 8080:8080 myapp:latest
+          env:
+            APP_ENV: test
 
-      - name: Run OWASP ZAP Scan
-        uses: zapbot/zap-action@v0.3.1
-        with:
-          cmd: zap-baseline.py -t http://localhost:8080 -r zap-report.html
+        - name: Run OWASP ZAP Scan
+          uses: zapbot/zap-action@v0.3.1
+          with:
+            cmd: zap-baseline.py -t http://localhost:8080 -r zap-report.html
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: zap-scan-report
-          path: zap-report.html
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v3
+          if: always()
+          with:
+            name: zap-scan-report
+            path: zap-report.html
 
 
 
