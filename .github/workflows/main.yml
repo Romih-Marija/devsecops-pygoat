@@ -59,13 +59,28 @@ jobs:
        name: docker-scout-findings
        path: scout-report.sarif
   zap_scan:
+    name: DAST - ZAP Full Scan
     runs-on: ubuntu-latest
-    name: Scan the webapplication 
+
     steps:
-      - name: ZAP Scan
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+
+      - name: Set up and Run Application
+        run: |
+          docker build -f Dockerfile -t pygoat-app:latest .
+          docker run -d -p 8080:8080 pygoat-app:latest
+          sleep 10 # Počakajte, da se aplikacija zažene
+
+      - name: Run ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
-          target: 'https://www.zaproxy.org/'
+          target: 'http://localhost:8080' # Zamenjajte s ciljnim URL-jem, če ni lokalni
+          rules-file: '.zap/rules.json'   # Opcijsko: dodajte pravila za izključitev
 
-
+      - name: Upload ZAP Findings
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-findings
+          path: *.html  # Privzeto ZAP generira HTML poročilo
 
