@@ -64,6 +64,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3.8.0
+     
+      - name: Build Docker Image
+        run: docker build -f Dockerfile -t myapp:latest .
       - name: Start Application
         run: |
           docker run -d -p 8080:8080 myapp:latest
