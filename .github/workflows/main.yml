@@ -72,7 +72,7 @@ jobs:
       - name: Set up and Run Application
         run: |
           docker build -f Dockerfile -t pygoat-app:latest .
-          docker run -d -p 8000:5000 pygoat-app:latest
+          docker run -d -p 8000:8000 pygoat-app:latest
           sleep 30
           docker logs $(docker ps -q)
           netstat -tuln | grep 8000 || echo "Port 8000 is not open"
