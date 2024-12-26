@@ -72,7 +72,7 @@ jobs:
       - name: Set up and Run Application
         run: |
           docker build -f Dockerfile -t pygoat-app:latest .
-          docker run -d -p --network="host" 8080:8080 pygoat-app:latest
+          docker run --network="host" -d -p 8080:8080 pygoat-app:latest
           sleep 30
           docker logs $(docker ps -q)
 
