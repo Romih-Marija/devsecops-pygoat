@@ -59,14 +59,6 @@ jobs:
         target: 'http://localhost:8000'  
         cmd_options: '-a -J zap-report.json'
 
-    - name: Summary of ZAP Scan
-      run: |
-        echo "Summary of ZAP Scan Results:"
-        echo "---------------------------"
-        echo "Low Severity Issues: $(jq '[.site[].alerts[] | select(.risk == "Low")] | length' zap-report.json)"
-        echo "Medium Severity Issues: $(jq '[.site[].alerts[] | select(.risk == "Medium")] | length' zap-report.json)"
-        echo "High Severity Issues: $(jq '[.site[].alerts[] | select(.risk == "High")] | length' zap-report.json)"
-  
     - name: Upload ZAP Report
       uses: actions/upload-artifact@v4
       if: always()
