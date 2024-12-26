@@ -72,15 +72,15 @@ jobs:
       - name: Set up and Run Application
         run: |
           docker build -f Dockerfile -t pygoat-app:latest .
-          docker run -d -p 8080:8080 pygoat-app:latest
+          docker run -d -p 8000:8000 pygoat-app:latest
           sleep 60
           docker logs $(docker ps -q)
 
       - name: Run ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
-          docker_name: 'owasp/zap2docker-stable'
-          target: 'http://host.docker.internal:8080'
+
+          target: 'http://host.docker.internal:8000'
 
 
 
